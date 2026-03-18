@@ -97,7 +97,12 @@ export default function SectionA_About() {
 // InteractiveCard Component
 // Extracts the vanilla JS mouse event tracking out of the main block
 // -------------------------------------------------------------
-function InteractiveCard({ categoryClass, children, variants }: any) {
+interface InteractiveCardProps {
+  categoryClass: string;
+  children: React.ReactNode;
+  variants: any; // Keep variants as Framer Motion 'any' to avoid strict generic typing
+}
+function InteractiveCard({ categoryClass, children, variants }: InteractiveCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const shineRef = useRef<HTMLDivElement>(null);
 

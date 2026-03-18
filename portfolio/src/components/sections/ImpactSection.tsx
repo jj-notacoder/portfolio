@@ -1,7 +1,6 @@
 'use client';
 
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useEffect } from 'react';
+import { motion, useMotionValue, useTransform, animate, Variants } from 'framer-motion';
 
 export default function ImpactSection() {
   const count = useMotionValue(0);
@@ -16,7 +15,7 @@ export default function ImpactSection() {
     });
   };
 
-  const containerVariants = {
+  const containerVariants: any = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
@@ -24,7 +23,7 @@ export default function ImpactSection() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { opacity: 0, x: -40 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };

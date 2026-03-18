@@ -5,6 +5,20 @@ import { useRef } from 'react';
 
 export default function SectionB_Experience() {
   const targetRef = useRef<HTMLDivElement>(null);
+
+  // Sub-component specifically to resolve React Hooks in Callback Array Maps Rules
+  const DotIndicator = ({ activeIndex, dotIndex }: { activeIndex: any, dotIndex: number }) => {
+    const width = useTransform(activeIndex, (val: any) => val === dotIndex ? 32 : 8);
+    const backgroundColor = useTransform(activeIndex, (val: any) => val === dotIndex ? "var(--accent-gold)" : "var(--glass-border)");
+    const boxShadow = useTransform(activeIndex, (val: any) => val === dotIndex ? "0 0 10px rgba(201,168,76,0.5)" : "none");
+
+    return (
+      <motion.div 
+        className="h-2 rounded-full transition-all duration-300"
+        style={{ width, backgroundColor, boxShadow }}
+      />
+    );
+  };
   
   // The section is 300vh tall to allow scrolling space.
   const { scrollYProgress } = useScroll({
@@ -125,15 +139,7 @@ export default function SectionB_Experience() {
         {/* Navigation Dots (Visual only for scroll indication based on activeIndex) */}
         <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-4 z-40">
           {[0,1,2].map((dotIndex) => (
-            <motion.div 
-              key={dotIndex}
-              className="h-2 rounded-full transition-all duration-300"
-              style={{
-                width: useTransform(activeIndex, (val) => val === dotIndex ? 32 : 8),
-                backgroundColor: useTransform(activeIndex, (val) => val === dotIndex ? "var(--accent-gold)" : "var(--glass-border)"),
-                boxShadow: useTransform(activeIndex, (val) => val === dotIndex ? "0 0 10px rgba(201,168,76,0.5)" : "none")
-              }}
-            />
+            <DotIndicator key={dotIndex} activeIndex={activeIndex} dotIndex={dotIndex} />
           ))}
         </div>
 

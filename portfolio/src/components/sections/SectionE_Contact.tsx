@@ -30,8 +30,6 @@ export default function SectionE_Contact() {
     if (!ctx) return;
 
     // ── 3. CANVAS RESIZE ──────────────────────────────────────
-    let currentFrameIndex = 0;
-    
     // Lerp globals
     let targetFrame = 0;
     let displayFrame = 0;

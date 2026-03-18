@@ -1,11 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react'; // Need to install lucide-react if not present, falling back to simple icons if needed.
+import { motion, Variants } from 'framer-motion';
 // We'll use simple text/emoji for icons to avoid extra dependencies if not requested, but the prompt asked for "Icon + text"
 
 export default function ProjectsSection() {
-  const containerVariants = {
+  const containerVariants: any = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
@@ -13,7 +12,7 @@ export default function ProjectsSection() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
