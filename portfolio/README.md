@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cinematic Portfolio - Jesher Jebson 🎥
 
-## Getting Started
+A deeply interactive, highly cinematic personal portfolio engineered to feel more like an A24 title sequence or an Apple Keynote than a traditional website. Built completely from the ground up using **Next.js (App Router)**, **Framer Motion**, **Tailwind CSS**, and raw **Canvas APIs**.
 
-First, run the development server:
+## 🌟 The Experience
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*   **Cinematic Scrollytelling**: Two distinct image-sequence `<canvas>` renders (a massive Hero opener and a compact Contact Outro) mathematically bound to scroll position. Pre-rendered frame sequences are linearly interpolated (`lerp`) through `requestAnimationFrame` for buttery-smooth scrubbing tied exactly to viewport movement.
+*   **"From the Abyss" 3D Cards**: Advanced hover interactions powered by vanilla JavaScript coordinate mapping within React. Cards independently track the user's cursor (`mousemove`) across a custom CSS 3D plane (`perspective: 1200px`), delivering genuine tilt depth, a perpetually spinning conic-border underglow, and a volumetric inner glow source accurately displacing beneath your cursor.
+*   **The Arsenal (Dynamic Carousel)**: An ultra-customized `500vh` sticky section utilizing strict CSS and Frame Motion offsets to build a 3-dimensional stacking slider without relying on external carousel libraries. Cards dynamically adjust their `scale`, `translateX`, `rotateY`, and `blur` based natively on horizontal tracking distance.
+*   **Horizontal Scroll Track**: A `300vw` wide experience timeline mounted within a sticky scrolling block, seamlessly translating vertical height into lateral motion.
+*   **Volumetric Glassmorphism**: Global implementation of deep void aesthetics utilizing dark blurred backing profiles stacked with luminous cyan and gold linear gradients.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack & Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   **Framework**: [Next.js 14](https://nextjs.org/) (App Directory Paradigm)
+*   **Styling Engine**: [Tailwind CSS](https://tailwindcss.com/) mapped to complex CSS variables and raw CSS `@keyframes` interpolation.
+*   **Animation Layer**: [Framer Motion](https://www.framer.com/motion/) handling `whileInView` staggered sequences, interpolation curves, and scroll binding alongside `requestAnimationFrame`.
+*   **System Tracking**: Native Intersection Observers and absolute bounds client rendering via standard DOM refs.
+*   **Typography**: *Clash Display* (Primary headings) matched against *DM Sans* (Body legibility).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Running Locally
 
-## Learn More
+To experience the cinematic scroll locally on your machine:
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Install Dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  **Start the Development Server:**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Explore**: Open [http://localhost:3000](http://localhost:3000) inside your browser. 
+    *(Note: For the frame-by-frame canvas rendering to function perfectly, ensure your `frames/` directories are securely placed in the `public` folder mirroring the code indices).*
 
-## Deploy on Vercel
+## 💡 System Design Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+*   **Z-Index Sandboxing**: The site operates on a strict tri-layer architectural rule. The raw `<canvas>` feeds sit completely divorced at `z-index: 0`. Dark translucent gradient overlays manage readability at `z-index: 10`, while all actual interactive React DOM nodes float purely in `z-index: 30+`.
+*   **Vanilla JS over React Overhead**: Complex sub-frame events (specifically the intense `mousemove` tracking responsible for the 3D abyss cards and the underlying image sequence tracking) bypass standard rapid-fire React state updates in favor of direct DOM `ref` manipulation to guarantee flawless 144hz rendering on desktop without garbage collection stuttering.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+© 2026 Jesher Jebson · Crafted in Abu Dhabi, UAE.
