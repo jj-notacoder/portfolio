@@ -526,6 +526,240 @@ body {
   color: rgba(240, 237, 230, 0.30);
 }
 
+/* ── LOADER SCREEN ─────────────────────────────────────────── */
+
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #050508;
+
+  /* Exit transition — the whole screen dissolves upward */
+  transition: opacity 0.9s cubic-bezier(0.76, 0, 0.24, 1),
+              transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+#loader.loader-exit {
+  opacity: 0;
+  transform: translateY(-24px);
+  pointer-events: none;
+}
+
+/* ── Background — subtle radial pulse ── */
+.loader-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 60% at 50% 50%,
+    rgba(201, 168, 76, 0.06) 0%,
+    rgba(78, 205, 196, 0.03) 40%,
+    transparent 70%
+  );
+  animation: loaderPulse 3s ease-in-out infinite;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+/* ── Grid lines — architectural ── */
+.loader-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.loader-grid span {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Vertical lines */
+.loader-grid span:nth-child(1) {
+  width: 1px; height: 100%;
+  left: 25%;
+  animation: gridFadeIn 1.2s ease forwards 0.2s;
+  opacity: 0;
+}
+.loader-grid span:nth-child(2) {
+  width: 1px; height: 100%;
+  left: 75%;
+  animation: gridFadeIn 1.2s ease forwards 0.4s;
+  opacity: 0;
+}
+
+/* Horizontal lines */
+.loader-grid span:nth-child(3) {
+  width: 100%; height: 1px;
+  top: 25%;
+  animation: gridFadeIn 1.2s ease forwards 0.3s;
+  opacity: 0;
+}
+.loader-grid span:nth-child(4) {
+  width: 100%; height: 1px;
+  top: 75%;
+  animation: gridFadeIn 1.2s ease forwards 0.5s;
+  opacity: 0;
+}
+
+@keyframes gridFadeIn {
+  to { opacity: 1; }
+}
+
+/* ── Center content ── */
+.loader-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Logo mark — SVG draw animation ── */
+.loader-mark {
+  width: 64px;
+  height: 64px;
+  animation: markFloat 3s ease-in-out infinite;
+}
+
+@keyframes markFloat {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-6px); }
+}
+
+.mark-path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawPath 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.3s;
+}
+
+.mark-path-inner {
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: drawPath 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.7s;
+}
+
+@keyframes drawPath {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Loading copy — cycling lines ── */
+.loader-copy {
+  position: relative;
+  height: 24px;
+  width: 280px;
+  text-align: center;
+}
+
+.loader-line {
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-body), 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: rgba(240, 237, 230, 0.45);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-line.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Progress bar ── */
+.loader-bar-track {
+  width: clamp(200px, 30vw, 320px);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  position: relative;
+  overflow: visible;
+}
+
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #C9A84C, #4ECDC4);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.6),
+              0 0 20px rgba(78, 205, 196, 0.3);
+  transition: width 0.15s linear;
+  position: relative;
+}
+
+.loader-bar-tip {
+  position: absolute;
+  right: -3px;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px #C9A84C, 0 0 16px #4ECDC4;
+  /* tip rides end of bar — positioned via JS */
+}
+
+/* ── Percentage ── */
+.loader-percent {
+  font-family: var(--font-display), 'Clash Display', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: rgba(240, 237, 230, 0.25);
+  font-weight: 500;
+}
+
+/* ── Bottom stamp ── */
+.loader-stamp {
+  position: absolute;
+  bottom: clamp(24px, 4vh, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  animation: stampFade 1s ease forwards 0.8s;
+  opacity: 0;
+}
+
+@keyframes stampFade {
+  to { opacity: 1; }
+}
+
+.stamp-name {
+  font-family: var(--font-display), 'Clash Display', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(240, 237, 230, 0.5);
+  font-weight: 700;
+}
+
+.stamp-dot {
+  color: rgba(201, 168, 76, 0.5);
+  font-size: 0.6rem;
+}
+
+.stamp-title {
+  font-family: var(--font-body), 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  color: rgba(240, 237, 230, 0.3);
+  text-transform: uppercase;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
