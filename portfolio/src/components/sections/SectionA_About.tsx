@@ -100,6 +100,7 @@ export default function SectionA_About() {
 interface InteractiveCardProps {
   categoryClass: string;
   children: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   variants: any; // Keep variants as Framer Motion 'any' to avoid strict generic typing
 }
 function InteractiveCard({ categoryClass, children, variants }: InteractiveCardProps) {

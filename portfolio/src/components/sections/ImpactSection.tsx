@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useMotionValue, useTransform, animate, Variants } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 
 export default function ImpactSection() {
   const count = useMotionValue(0);
@@ -15,6 +15,7 @@ export default function ImpactSection() {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const containerVariants: any = {
     hidden: { opacity: 0 },
     visible: { 
@@ -23,6 +24,7 @@ export default function ImpactSection() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const itemVariants: any = {
     hidden: { opacity: 0, x: -40 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
