@@ -1,16 +1,16 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { useRef } from 'react';
 
 export default function SectionB_Experience() {
   const targetRef = useRef<HTMLDivElement>(null);
 
   // Sub-component specifically to resolve React Hooks in Callback Array Maps Rules
-  const DotIndicator = ({ activeIndex, dotIndex }: { activeIndex: any, dotIndex: number }) => {
-    const width = useTransform(activeIndex, (val: any) => val === dotIndex ? 32 : 8);
-    const backgroundColor = useTransform(activeIndex, (val: any) => val === dotIndex ? "var(--accent-gold)" : "var(--glass-border)");
-    const boxShadow = useTransform(activeIndex, (val: any) => val === dotIndex ? "0 0 10px rgba(201,168,76,0.5)" : "none");
+  const DotIndicator = ({ activeIndex, dotIndex }: { activeIndex: MotionValue<number>, dotIndex: number }) => {
+    const width = useTransform(activeIndex, (val) => val === dotIndex ? 32 : 8);
+    const backgroundColor = useTransform(activeIndex, (val) => val === dotIndex ? "var(--accent-gold)" : "var(--glass-border)");
+    const boxShadow = useTransform(activeIndex, (val) => val === dotIndex ? "0 0 10px rgba(201,168,76,0.5)" : "none");
 
     return (
       <motion.div 
@@ -34,7 +34,7 @@ export default function SectionB_Experience() {
     if (val < 0.33) return 0;
     if (val < 0.66) return 1;
     return 2;
-  });
+  }) as MotionValue<number>;
 
   const activeDisplay = useTransform(activeIndex, (val) => `0${val + 1}`);
 
