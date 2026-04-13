@@ -43,7 +43,7 @@ export default function ScrollyCanvas({ className, frameCount = 192 }: ScrollyCa
             new Promise<void>((resolve) => {
               const img = new Image();
               const indexStr = index.toString().padStart(3, '0');
-              img.src = `/frame_${indexStr}_delay-0.041s.png`;
+              img.src = `/frame_${indexStr}_delay-0.041s.webp`;
               
               img.onload = () => {
                 loadedImages[index] = img;

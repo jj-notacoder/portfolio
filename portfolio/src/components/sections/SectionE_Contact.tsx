@@ -17,7 +17,7 @@ export default function SectionE_Contact() {
     // Match exact path from ScrollyCanvas
     const getFramePath = (n: number) => {
       const indexStr = String(n).padStart(3, '0');
-      return `/frame_${indexStr}_delay-0.041s.png`;
+      return `/frame_${indexStr}_delay-0.041s.webp`;
     };
 
     const contactSection = sectionRef.current;

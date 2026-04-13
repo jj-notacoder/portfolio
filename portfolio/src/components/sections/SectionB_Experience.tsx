@@ -59,7 +59,7 @@ export default function SectionB_Experience() {
       title: "Competitor\n& Innovator",
       desc: "Actively competing across innovation, security, and robotics challenges — pushing ideas into real prototypes.",
       isList: true,
-      skills: ["🥇 Winner — EDGE Innovation Competition (2025)", "🛡️ KUCSC National CTF Participant", "🤖 KUEC Robothon Competitor"]
+      skills: ["🥇 Winner — EDGE Innovation Competition (2025)", "🛡️ KUCSC National CTF Participant", "🤖 KUEC Robothon Competitor", "🧠 Socia AI Build Hackathon Participant"]
     }
   ];
 
