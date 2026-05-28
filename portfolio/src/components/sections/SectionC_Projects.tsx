@@ -13,7 +13,7 @@ export default function SectionC_Projects() {
   });
 
   // Number of cards to drive the progress mapping
-  const cardCount = 4;
+  const cardCount = 5;
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     const newActive = Math.min(cardCount - 1, Math.floor(latest * cardCount));
@@ -98,6 +98,17 @@ export default function SectionC_Projects() {
         { label: "GitHub ↗", url: "https://github.com/jj-notacoder/imfhi" },
         { label: "Live ↗", url: "https://imfhi.vercel.app/" }
       ]
+    },
+    {
+      num: "05",
+      title: "Mafia",
+      category: "Multiplayer · Social Deduction",
+      desc: "A real-time, retro-arcade themed social deduction game built for the web. Gather your friends, assign roles, and figure out who is who before the Mafia takes over the town. Trust no one.",
+      stack: ["React", "Tailwind CSS", "Socket.io", "Express"],
+      links: [
+        { label: "GitHub ↗", url: "https://github.com/jj-notacoder/mafia" },
+        { label: "Live ↗", url: "https://mafia-five-pearl.vercel.app" }
+      ]
     }
   ];
 
@@ -162,7 +173,7 @@ export default function SectionC_Projects() {
           
           {/* Progress dots */}
           <div className="slider-dots">
-            {[0, 1, 2, 3].map((dotIndex) => (
+            {projects.map((_, dotIndex) => (
               <span 
                 key={dotIndex} 
                 className={`dot ${activeIndex === dotIndex ? 'active' : ''}`} 
@@ -176,7 +187,7 @@ export default function SectionC_Projects() {
           <div className="slider-counter">
             <span id="activeNum">0{activeIndex + 1}</span>
             <span className="opacity-50 mx-2 tracking-[0.1em]">/</span>
-            <span>04</span>
+            <span>0{projects.length}</span>
           </div>
 
         </div>

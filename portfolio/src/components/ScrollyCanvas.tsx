@@ -27,15 +27,15 @@ export default function ScrollyCanvas({ className, frameCount = 192 }: ScrollyCa
   const currentIndex = useTransform(scrollYProgress, [0, 1], [0, frameCount - 1]);
 
   useEffect(() => {
-    // Optimized preloading with concurrent loading chunks
-    const loadImages = async () => {
-      let loaded = 0;
-      const loadedImages: HTMLImageElement[] = new Array(frameCount);
+    let active = true;
+    const loadedImages: HTMLImageElement[] = new Array(frameCount);
 
-      // Load in batches to not overwhelm the browser
-      const batchSize = 10;
-      
-      for (let i = 0; i < frameCount; i += batchSize) {
+    const startBackgroundLoading = async () => {
+      const batchSize = 15;
+      let loadedCount = 1;
+
+      for (let i = 1; i < frameCount; i += batchSize) {
+        if (!active) return;
         const batch = [];
         for (let j = 0; j < batchSize && i + j < frameCount; j++) {
           const index = i + j;
@@ -47,35 +47,86 @@ export default function ScrollyCanvas({ className, frameCount = 192 }: ScrollyCa
               
               img.onload = () => {
                 loadedImages[index] = img;
-                loaded++;
-                setLoadingProgress(Math.round((loaded / frameCount) * 100));
+                loadedCount++;
+                setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
                 resolve();
               };
               img.onerror = () => {
-                // Ignore missing images and resolve anyway to prevent unhandled rejection blocks
-                loaded++;
-                setLoadingProgress(Math.round((loaded / frameCount) * 100));
+                loadedCount++;
+                setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
                 resolve();
-              }
+              };
             })
           );
         }
         await Promise.all(batch);
+        
+        if (active) {
+          setImages([...loadedImages]);
+        }
       }
+    };
 
-      setImages(loadedImages);
+    // Load first frame immediately as the critical asset
+    const firstImg = new Image();
+    firstImg.src = `/frame_000_delay-0.041s.webp`;
+    firstImg.onload = () => {
+      if (!active) return;
+      loadedImages[0] = firstImg;
+      setImages([...loadedImages]);
+      setIsLoaded(true);
+      setLoadingProgress(Math.round((1 / frameCount) * 100));
+
+      // Start background loading of remaining frames after onload or short delay
+      const startLoad = () => {
+        setTimeout(() => {
+          startBackgroundLoading();
+        }, 300);
+      };
+
+      if (document.readyState === 'complete') {
+        startLoad();
+      } else {
+        window.addEventListener('load', startLoad, { once: true });
+      }
+    };
+    firstImg.onerror = () => {
+      if (!active) return;
       setIsLoaded(true);
     };
 
-    loadImages();
+    return () => {
+      active = false;
+    };
   }, [frameCount]);
 
   // Draw the actual image on the canvas
   const drawImage = (index: number) => {
-    if (!images[index] || !canvasRef.current || !isLoaded) return;
+    if (!canvasRef.current || !isLoaded) return;
+    
+    // Find closest loaded frame if requested frame is not yet available
+    let img = images[index];
+    if (!img) {
+      let closestIndex = -1;
+      let minDistance = Infinity;
+      for (let i = 0; i < images.length; i++) {
+        if (images[i]) {
+          const dist = Math.abs(i - index);
+          if (dist < minDistance) {
+            minDistance = dist;
+            closestIndex = i;
+          }
+        }
+      }
+      if (closestIndex !== -1) {
+        img = images[closestIndex];
+      }
+    }
+
+    if (!img) return;
     
     // Check if image is loaded
-    if (!images[index].complete || images[index].naturalWidth === 0) return;
+    if (!img.complete || img.naturalWidth === 0) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -98,7 +149,6 @@ export default function ScrollyCanvas({ className, frameCount = 192 }: ScrollyCa
     ctx.scale(dpr, dpr);
 
     // Object cover logic
-    const img = images[index];
     const imageAspectRatio = img.width / img.height;
     const canvasAspectRatio = window.innerWidth / window.innerHeight;
 
@@ -134,12 +184,12 @@ export default function ScrollyCanvas({ className, frameCount = 192 }: ScrollyCa
     }
   });
 
-  // Handle Initial Draw and Window Resizes
+  // Handle Initial Draw, Window Resizes, and redraws when images update in background
   useEffect(() => {
     if (!isLoaded) return;
     
-    // Draw initial frame
-    drawImage(0);
+    // Draw current frame
+    drawImage(Math.floor(currentIndex.get()));
 
     const handleResize = () => {
       drawImage(Math.floor(currentIndex.get()));
@@ -147,7 +197,7 @@ export default function ScrollyCanvas({ className, frameCount = 192 }: ScrollyCa
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isLoaded, images]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div ref={containerRef} className={cn("relative h-[500vh] w-full bg-[#121212]", className)}>
